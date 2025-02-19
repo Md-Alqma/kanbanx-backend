@@ -11,9 +11,9 @@ const {
 const router = express.Router();
 
 router.post("/", authMiddleware, createTask);
-router.get("/:taskId", authMiddleware, getTask);
-router.put("/:taskId", authMiddleware, updateTask);
-router.put("/:taskId/move", authMiddleware, moveTask);
-router.delete("/:taskId", authMiddleware, deleteTask);
+router.get("/:id", authMiddleware, getTask);
+router.put("/:id", authMiddleware, updateTask);
+router.put("/:id/move", authMiddleware, moveTask);
+router.delete("/:id", authMiddleware, deleteTask);
 
 module.exports = router;

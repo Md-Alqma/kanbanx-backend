@@ -11,7 +11,7 @@ const {
 const router = express.Router();
 
 router.post("/", authMiddleware, createBoard);
-router.get("/:boardId", authMiddleware, getSingleBoard);
+router.get("/:id", authMiddleware, getSingleBoard);
 router.get("/", authMiddleware, getBoards);
 router.put("/:id", authMiddleware, updateBoard);
 router.delete("/:id", authMiddleware, deleteBoard);

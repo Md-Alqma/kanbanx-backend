@@ -20,7 +20,7 @@ exports.createTask = async (req, res) => {
 
 exports.getTask = async (req, res) => {
   try {
-    const task = await Task.findById(req.params.taskId);
+    const task = await Task.findById(req.params.id);
     if (!task) {
       res.status(404).json({ message: "Task not found" });
     }
@@ -30,7 +30,7 @@ exports.getTask = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
   try {
-    const task = await Task.findByIdAndUpdate(req.params.taskId, req.body, {
+    const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
     if (!task) {
@@ -45,10 +45,10 @@ exports.updateTask = async (req, res) => {
 exports.moveTask = async (req, res) => {
     try {
       const { listId } = req.body; // New list ID (where the task is moving)
-      const taskId = req.params.taskId;
+      const id = req.params.id;
   
       // Find the task
-      const task = await Task.findById(taskId);
+      const task = await Task.findById(id);
       if (!task) {
         return res.status(404).json({ message: "Task not found" });
       }
@@ -67,19 +67,19 @@ exports.moveTask = async (req, res) => {
   
       // Update the task's listId
       const updatedTask = await Task.findByIdAndUpdate(
-        taskId,
+        id,
         { listId: listId },
         { new: true }
       );
   
       // Remove the task from the original list
       await List.findByIdAndUpdate(originalList._id, {
-        $pull: { tasks: taskId },
+        $pull: { tasks: id },
       });
   
       // Add the task to the new list
       await List.findByIdAndUpdate(listId, {
-        $push: { tasks: taskId },
+        $push: { tasks: id },
       });
   
       res.json({ message: "Task moved successfully", task: updatedTask });
@@ -91,15 +91,15 @@ exports.moveTask = async (req, res) => {
 
 exports.deleteTask = async (req, res) => {
   try {
-    const { taskId } = req.params;
-    const task = await Task.findById(taskId);
+    const { id } = req.params;
+    const task = await Task.findById(id);
     if (!task) {
       return res.status(404).json({ error: "Task not found" });
     }
     const listId = task.listId;
 
-    await Task.findByIdAndDelete(taskId);
-    await List.findByIdAndUpdate(listId, { $pull: { tasks: taskId } });
+    await Task.findByIdAndDelete(id);
+    await List.findByIdAndUpdate(listId, { $pull: { tasks: id } });
     res.json({ message: "Task deleted successfully" });
   } catch (error) {
     res.status(400).json({ error: error.message });

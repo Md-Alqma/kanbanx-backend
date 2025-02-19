@@ -48,8 +48,6 @@ exports.deleteList = async (req, res) => {
 
     const boardId = list.boardId;
 
-    console.log(boardId);
-
     await List.findByIdAndDelete(id);
     await Board.findByIdAndUpdate(boardId, { $pull: { lists: id } });
     res.json({ message: "List deleted successfully" });

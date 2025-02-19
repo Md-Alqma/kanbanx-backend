@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const boardRoutes = require("./routes/boardRoutes");
 const listRoutes = require("./routes/listRoutes");
+const taskRoutes = require("./routes/taskRoutes");
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use("/api/users", authRoutes);
 app.use("/api/boards", boardRoutes);
 app.use("/api/lists", listRoutes);
+app.use("/api/tasks", taskRoutes);
 
 connectDB();
 app.get("/", (req, res) => {

@@ -40,6 +40,14 @@ exports.loginUser = async (req, res) => {
   }
 };
 
+exports.loginUser = async (req, res) => {
+  try {
+    res.clearCookie("token", { httpOnly: true, sameSite: "None" });
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 exports.getUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).select("-password");

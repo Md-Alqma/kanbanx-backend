@@ -13,7 +13,7 @@ exports.registerUser = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashedPassword });
-    const token = generateToken(user);
+    const token = generateToken(user._id);
     return res.status(201).json({
       message: "User registered successfully",
       name: user.name,
@@ -31,7 +31,7 @@ exports.loginUser = async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const token = generateToken(user);
+    const token = generateToken(user._id);
     res
       .cookie("token", token, { httpOnly: true })
       .json({ message: "Logged in successfully", name: user.name, token });
@@ -42,9 +42,7 @@ exports.loginUser = async (req, res) => {
 
 exports.getUser = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.user.email }).select(
-      "-password"
-    );
+    const user = await User.findById(req.user.userId).select("-password");
     res.json({ name: user.name, email: user.email });
   } catch (error) {
     res.status(400).json({ error: error.message });

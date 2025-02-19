@@ -17,4 +17,4 @@ const taskSchema = new mongoose.Schema({
   listId: { type: mongoose.Schema.Types.ObjectId, ref: "List", required: true },
 });
 
-module.exports = taskSchema;
+module.exports = mongoose.model("Task", taskSchema);

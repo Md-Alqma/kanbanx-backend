@@ -10,4 +10,4 @@ const listSchema = new mongoose.Schema({
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }], // List has multiple tasks
 });
 
-module.exports = listSchema;
+module.exports = mongoose.model('List', listSchema);

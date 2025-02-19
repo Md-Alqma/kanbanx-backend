@@ -6,4 +6,4 @@ const boardSchema = new mongoose.Schema({
   lists: [{ type: mongoose.Schema.Types.ObjectId, ref: "List" }], // Board has multiple lists
 });
 
-module.exports = boardSchema;
+module.exports = mongoose.model("Board", boardSchema);

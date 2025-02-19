@@ -12,6 +12,19 @@ exports.createBoard = async (req, res) => {
   }
 };
 
+exports.getSingleBoard = async (req, res) => {
+  try {
+    const { boardId } = req.params;
+    const board = await Board.findById(boardId).populate("lists");
+    if (!board) {
+      return res.status(404).json({ message: "Board not found" });
+    }
+    res.json(board);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.getBoards = async (req, res) => {
   try {
     const boards = await Board.find({ userId: req.user.userId }).populate(

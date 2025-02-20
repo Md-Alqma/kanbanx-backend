@@ -12,7 +12,7 @@ const sendResponse = (res, user, message) => {
     })
     .json({
       message,
-      email: user.email ,
+      email: user.email,
       token,
     });
 };
@@ -30,7 +30,7 @@ exports.registerUser = async (req, res) => {
 
     // Hash password securely before storing
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword });
+    const user = await User.create({ email, password: hashedPassword });
 
     // Send response with token
     sendResponse(res, user, "User registered successfully");
@@ -82,7 +82,7 @@ exports.getUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json({ name: user.name, email: user.email });
+    res.json({ email: user.email });
   } catch (error) {
     res.status(500).json({ error: "Server error: " + error.message });
   }

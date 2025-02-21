@@ -10,14 +10,15 @@ const taskRoutes = require("./routes/taskRoutes");
 
 const app = express();
 dotenv.config();
-
-app.use(express.json());
-app.use(cookieParser());
 app.use(
   cors({
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
+
+app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/users", authRoutes);
 app.use("/api/boards", boardRoutes);

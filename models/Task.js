@@ -9,11 +9,6 @@ const taskSchema = new mongoose.Schema({
     enum: ["Low", "Medium", "High"],
     default: "Medium",
   },
-  status: {
-    type: String,
-    enum: ["To Do", "In Progress", "Done"],
-    default: "To Do",
-  },
   listId: { type: mongoose.Schema.Types.ObjectId, ref: "List", required: true },
 });
 

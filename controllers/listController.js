@@ -24,6 +24,31 @@ exports.createList = async (req, res) => {
   }
 };
 
+exports.getLists = async (req, res) => {
+  try {
+    const lists = await List.find().populate("tasks");
+    res.json(lists);
+  } catch (error) {
+    res.status(500).json({ error: "Server error: " + error.message });
+  }
+};
+
+exports.getSingleList = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const list = await List.findById(id).populate("tasks");
+
+    if (!list) {
+      return res.status(404).json({ message: "List not found" });
+    }
+
+    res.json(list);
+  } catch (error) {
+    res.status(500).json({ error: "Server error: " + error.message });
+  }
+};
+
 // Update a list
 exports.updateList = async (req, res) => {
   try {

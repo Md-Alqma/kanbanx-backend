@@ -4,7 +4,7 @@ const Task = require("../models/Task");
 // Create a new task
 exports.createTask = async (req, res) => {
   try {
-    const { title, description, status, dueDate, listId } = req.body;
+    const { title, description, priority, dueDate, listId } = req.body;
 
     if (!title || !listId) {
       return res.status(400).json({ message: "Title and listId are required" });
@@ -16,7 +16,13 @@ exports.createTask = async (req, res) => {
     }
 
     // Create the task and associate it with the list
-    const task = await Task.create({ title, description, status, dueDate, listId });
+    const task = await Task.create({
+      title,
+      description,
+      priority,
+      dueDate,
+      listId,
+    });
     list.tasks.push(task._id);
     await list.save();
 
@@ -42,11 +48,11 @@ exports.getTask = async (req, res) => {
 // Update a task
 exports.updateTask = async (req, res) => {
   try {
-    const { title, description, status, dueDate } = req.body;
+    const { title, description, priority, dueDate } = req.body;
 
     const task = await Task.findByIdAndUpdate(
       req.params.id,
-      { title, description, status, dueDate },
+      { title, description, priority, dueDate },
       { new: true, runValidators: true }
     );
 
@@ -74,8 +80,10 @@ exports.moveTask = async (req, res) => {
       List.findById(listId),
     ]);
 
-    if (!originalList) return res.status(404).json({ message: "Original list not found" });
-    if (!newList) return res.status(404).json({ message: "New list not found" });
+    if (!originalList)
+      return res.status(404).json({ message: "Original list not found" });
+    if (!newList)
+      return res.status(404).json({ message: "New list not found" });
 
     // Update task's listId and update lists
     await Promise.all([

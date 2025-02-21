@@ -23,7 +23,7 @@ exports.createTask = async (req, res) => {
       dueDate,
       listId,
     });
-    list.tasks.push(task._id);
+    list.tasks.push(task);
     await list.save();
 
     res.status(201).json(task);

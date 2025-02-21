@@ -30,7 +30,10 @@ exports.getSingleBoard = async (req, res) => {
     const { id } = req.params;
 
     // Populate lists
-    const board = await Board.findById(id).populate("lists");
+    const board = await Board.findById(id).populate({
+      path: "lists",
+      populate: { path: "tasks" },
+    });
 
     if (!board) {
       return res.status(404).json({ message: "Board not found" });
@@ -54,7 +57,10 @@ exports.getBoards = async (req, res) => {
     }
 
     // Fetch boards
-    const boards = await Board.find({ userId }).populate("lists");
+    const boards = await Board.find({ userId }).populate({
+      path: "lists",
+      populate: { path: "tasks" },
+    });
     res.json(boards);
   } catch (error) {
     res.status(500).json({ error: "Server error: " + error.message });

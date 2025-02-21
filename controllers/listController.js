@@ -26,7 +26,8 @@ exports.createList = async (req, res) => {
 
 exports.getLists = async (req, res) => {
   try {
-    const lists = await List.find().populate("tasks");
+    const { boardId } = req.params;
+    const lists = await List.find({ boardId }).populate("tasks");
     res.json(lists);
   } catch (error) {
     res.status(500).json({ error: "Server error: " + error.message });

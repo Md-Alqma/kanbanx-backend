@@ -7,19 +7,21 @@ const User = require("../models/user");
 
 router.post(
   "/signup",
+  body("username")
+    .isLength({ min: 3 })
+    .withMessage("Username must be at least 3 characters long")
+    .custom(async (value) => {
+      const existingUser = await User.findOne({ username: value });
+      if (existingUser) {
+        return Promise.reject("Username is already taken");
+      }
+    }),
   body("password")
     .isLength({ min: 8 })
     .withMessage("password must be at least 8 characters"),
   body("confirmPassword")
     .isLength({ min: 8 })
     .withMessage("confirmPassword must be at least 8 characters"),
-  body("username").custom((value) => {
-    return User.findOne({ username: value }).then((user) => {
-      if (user) {
-        return Promise.reject("username already used");
-      }
-    });
-  }),
   validation.validate,
   userController.register
 );

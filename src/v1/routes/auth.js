@@ -16,6 +16,15 @@ router.post(
         return Promise.reject("Username is already taken");
       }
     }),
+  body("email")
+    .isEmail()
+    .withMessage("Please enter a valid email")
+    .custom(async (value) => {
+      const existingUser = await User.findOne({ email: value });
+      if (existingUser) {
+        return Promise.reject("Email is already in use");
+      }
+    }),
   body("password")
     .isLength({ min: 8 })
     .withMessage("password must be at least 8 characters"),
@@ -28,6 +37,7 @@ router.post(
 
 router.post(
   "/login",
+  body("email").isEmail().withMessage("Please enter a valid email"),
   body("password")
     .isLength({ min: 8 })
     .withMessage("password must be at least 8 characters"),

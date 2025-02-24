@@ -25,15 +25,17 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const user = await User.findOne({ username }).select("password username");
+    const user = await User.findOne({ email }).select(
+      "password email username"
+    );
     if (!user) {
       return res.status(401).json({
         errors: [
           {
-            path: "username",
-            msg: "Invalid username or password",
+            path: "email",
+            msg: "Invalid email or password",
           },
         ],
       });
@@ -48,8 +50,8 @@ exports.login = async (req, res) => {
       return res.status(401).json({
         errors: [
           {
-            path: "username",
-            msg: "Invalid username or password",
+            path: "email",
+            msg: "Invalid email or password",
           },
         ],
       });
